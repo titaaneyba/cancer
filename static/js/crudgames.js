@@ -178,7 +178,7 @@ function configurarEventos() {
         });
     });
 
-    // Editar paciente
+    // Editar paciente - abrir modal con datos
     $('#tablaPacientes').on('click', '.btn-editar', function () {
         const row = $(this).closest('tr');
         const data = $('#tablaPacientes').DataTable().row(row).data();
@@ -190,9 +190,16 @@ function configurarEventos() {
         $('#editarCountry').val(data[4] === 'N/A' ? '' : data[4]);
         $('#editarCancerType').val(data[5] === 'N/A' ? '' : data[5]);
         $('#editarCancerStage').val(data[6] === 'N/A' ? '' : data[6]);
-        $('#editarTreatmentCost').val(data[7].replace('$', '') === 'N/A' ? '' : data[7].replace('$', ''));
-        $('#editarSurvivalYears').val(data[8].replace(' años', '') === 'N/A' ? '' : data[8].replace(' años', ''));
+        $('#editarTreatmentCost').val(data[7] === 'N/A' ? '' : data[7].replace('$', ''));
+        $('#editarSurvivalYears').val(data[8] === 'N/A' ? '' : data[8].replace(' años', ''));
         $('#editarSeverityScore').val(data[9]);
+
+        // Si tienes más campos en el formulario editar, debes agregarlos aquí si tienes esos datos disponibles
+        // Por ejemplo:
+        // $('#editarYear').val(data[?] || '');
+        // $('#editarGeneticRisk').val(data[?] || '');
+        // $('#editarAirPollution').val(data[?] || 0);
+        // etc.
 
         const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
         modal.show();
@@ -256,13 +263,18 @@ function configurarEventos() {
                 $.ajax({
                     url: `/del/patient/${id}`,
                     method: 'DELETE',
-                    success: function () {
+                    contentType: 'application/json',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (response) {
                         mostrarToast('🗑️ Paciente eliminado', 'danger');
                         cargarDatos();
                     },
                     error: function (xhr, status, error) {
                         console.error("Error al eliminar paciente:", error);
-                        mostrarToast('❌ Error al eliminar paciente', 'danger');
+                        const mensaje = xhr.responseJSON?.error || 'Error al eliminar paciente';
+                        mostrarToast(`❌ ${mensaje}`, 'danger');
                     }
                 });
             }
@@ -270,6 +282,7 @@ function configurarEventos() {
     });
 }
 
+// Función para mostrar notificaciones toast
 function mostrarToast(mensaje, tipo = 'primary') {
     const toastEl = $('#toastNotificacion');
     const toastBody = $('#toastMensaje');

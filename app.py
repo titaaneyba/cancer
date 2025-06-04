@@ -217,12 +217,17 @@ def crear_paciente():
 
 @app.route('/del/patient/<int:id>', methods=['DELETE'])
 def eliminar_paciente(id):
-    paciente = db_session.query(PacienteCancer).get(id)
-    if paciente:
-        db_session.delete(paciente)
-        db_session.commit()
-        return jsonify({"mensaje": "Paciente eliminado correctamente"})
-    return jsonify({"error": "Paciente no encontrado"}), 404
+    try:
+        paciente = db_session.query(PacienteCancer).get(id)
+        if paciente:
+            db_session.delete(paciente)
+            db_session.commit()
+            return jsonify({"mensaje": "Paciente eliminado correctamente"})
+        return jsonify({"error": "Paciente no encontrado"}), 404
+    except Exception as e:
+        db_session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/upd/patient/<int:id>', methods=['PUT'])
 def actualizar_paciente(id):
