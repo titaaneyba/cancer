@@ -1,0 +1,427 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Acceso al Sistema Oncológico{% endblock %}
+
+{% block content %}
+<div class="hospital-login-container">
+  <!-- Sección izquierda con imagen -->
+  <div class="hospital-hero-section">
+    <div class="hospital-hero-overlay"></div>
+    <div class="hospital-hero-content">
+      <h1><i class="fas fa-heartbeat"></i> Sistema Oncológico Integral</h1>
+      <p class="lead">Cuidando tu salud con tecnología y calidez humana</p>
+      <div class="hospital-features">
+        <div class="feature-item">
+          <i class="fas fa-shield-alt"></i>
+          <span>Seguridad HIPAA Certificada</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-clock"></i>
+          <span>Acceso 24/7</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-user-md"></i>
+          <span>Equipo Médico Especializado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección derecha con formulario -->
+  <div class="hospital-login-form">
+    <div class="hospital-card">
+      <div class="hospital-card-header">
+        <div class="hospital-logo">
+          <i class="fas fa-hospital-symbol"></i>
+          <h2>Onco<span>Care</span></h2>
+        </div>
+        <p>Bienvenido al sistema de gestión</p>
+      </div>
+
+      <div class="hospital-card-body">
+        <!-- Mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              <i class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-triangle{% endif %} me-2"></i>
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Formulario de Login -->
+        <div id="loginFormStep">
+          <form method="POST" action="{{ url_for('auth') }}">
+            <input type="hidden" name="action" value="login">
+            
+            <div class="form-group hospital-input-group">
+              <label for="username">Usuario</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Ingrese su usuario" required>
+            </div>
+            
+            <div class="form-group hospital-input-group">
+              <label for="password">Contraseña</label>
+              <div class="password-container">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                <button type="button" class="btn btn-outline-secondary toggle-password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">Recordar acceso</label>
+              </div>
+              <a href="#" class="hospital-link">¿Olvidó su contraseña?</a>
+            </div>
+            
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" class="btn hospital-primary-btn">
+                INGRESAR AL SISTEMA
+              </button>
+            </div>
+
+            <!-- Sección modificada: espacio de 0.5 cm -->
+            <div class="text-center" style="margin-top: 0.5cm;">
+              <a href="#" class="btn hospital-secondary-btn">
+                <i class="fas fa-question-circle"></i> ¿Necesitas ayuda?
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Formulario de Registro (oculto inicialmente) -->
+        <div id="registerFormStep" style="display: none;">
+          <form method="POST" action="{{ url_for('auth') }}">
+            <input type="hidden" name="action" value="register">
+            
+            <div class="form-group hospital-input-group">
+              <label for="reg_username">Usuario</label>
+              <input type="text" class="form-control" id="reg_username" name="username" placeholder="Crea tu usuario" required>
+            </div>
+            
+            <div class="form-group hospital-input-group">
+              <label for="reg_password">Contraseña</label>
+              <div class="password-container">
+                <input type="password" class="form-control" id="reg_password" name="password" placeholder="Crea tu contraseña" required>
+                <button type="button" class="btn btn-outline-secondary toggle-password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" class="btn hospital-primary-btn">
+                REGISTRARSE
+              </button>
+            </div>
+
+            <div class="text-center">
+              <a href="#" id="showLoginLink" class="hospital-link">¿Ya tienes una cuenta? Inicia sesión</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Enlace para cambiar a registro -->
+        <div class="text-center mt-4">
+          <p class="mb-1">¿No tienes una cuenta?</p>
+          <a href="#" id="showRegisterLink" class="hospital-link">Registrarse aquí</a>
+        </div>
+      </div>
+      
+      <div class="hospital-card-footer">
+        <p class="small"><i class="fas fa-copyright"></i> Centro Oncológico Univalle - 2025</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Estilos generales */
+  .hospital-login-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* Sección hero con imagen */
+  .hospital-hero-section {
+    flex: 1;
+    background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .hospital-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13, 71, 114, 0.85);
+  }
+  
+  .hospital-hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 600px;
+  }
+  
+  .hospital-hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  
+  .hospital-hero-content h1 i {
+    color: #4fc3f7;
+    margin-right: 15px;
+  }
+  
+  .hospital-hero-content .lead {
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+  }
+  
+  .hospital-features {
+    margin-top: 3rem;
+  }
+  
+  .feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .feature-item i {
+    font-size: 1.5rem;
+    color: #4fc3f7;
+    margin-right: 15px;
+    width: 30px;
+    text-align: center;
+  }
+  
+  /* Sección del formulario */
+  .hospital-login-form {
+    width: 450px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .hospital-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  .hospital-card-header {
+    padding: 2rem 2rem 1rem;
+    text-align: center;
+    background: white;
+  }
+  
+  .hospital-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .hospital-logo i {
+    font-size: 2.2rem;
+    color: #0d4772;
+    margin-right: 10px;
+  }
+  
+  .hospital-logo h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    color: #0d4772;
+  }
+  
+  .hospital-logo h2 span {
+    color: #4fc3f7;
+    font-weight: 300;
+  }
+  
+  .hospital-card-header p {
+    color: #6c757d;
+    margin-bottom: 0;
+  }
+  
+  .hospital-card-body {
+    padding: 2rem;
+  }
+  
+  /* Grupos de input */
+  .hospital-input-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .hospital-input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #495057;
+    font-weight: 500;
+  }
+  
+  .password-container {
+    position: relative;
+  }
+  
+  .password-container .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6c757d;
+  }
+  
+  /* Botones */
+  .hospital-primary-btn {
+    background: linear-gradient(135deg, #0d4772, #1a7fc1);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s;
+  }
+  
+  .hospital-primary-btn:hover {
+    background: linear-gradient(135deg, #1a7fc1, #0d4772);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 71, 114, 0.3);
+  }
+  
+  .hospital-secondary-btn {
+    background: white;
+    color: #0d4772;
+    border: 1px solid #0d4772;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s;
+  }
+  
+  .hospital-secondary-btn:hover {
+    background: #f0f7ff;
+  }
+  
+  .hospital-secondary-btn i {
+    margin-right: 8px;
+  }
+  
+  .hospital-link {
+    color: #1a7fc1;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  
+  .hospital-link:hover {
+    color: #0d4772;
+    text-decoration: underline;
+  }
+  
+  .hospital-card-footer {
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 1px solid #eee;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .hospital-login-container {
+      flex-direction: column;
+    }
+    
+    .hospital-hero-section {
+      padding: 4rem 2rem;
+    }
+    
+    .hospital-login-form {
+      width: 100%;
+      padding: 2rem;
+    }
+    
+    .hospital-card {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .hospital-hero-content h1 {
+      font-size: 2rem;
+    }
+    
+    .hospital-hero-content .lead {
+      font-size: 1rem;
+    }
+    
+    .hospital-card-header, 
+    .hospital-card-body {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Mostrar/ocultar contraseña
+  document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+      const input = this.parentElement.querySelector('input');
+      const icon = this.querySelector('i');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+  });
+
+  // Mostrar formulario de registro
+  document.getElementById('showRegisterLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('loginFormStep').style.display = 'none';
+    document.getElementById('registerFormStep').style.display = 'block';
+    document.querySelector('.text-center.mt-4').style.display = 'none';
+  });
+
+  // Mostrar formulario de login
+  document.getElementById('showLoginLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('registerFormStep').style.display = 'none';
+    document.getElementById('loginFormStep').style.display = 'block';
+    document.querySelector('.text-center.mt-4').style.display = 'block';
+  });
+</script>
+{% endblock %}

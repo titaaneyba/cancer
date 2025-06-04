@@ -1,0 +1,113 @@
+<!-- Modal Editar Paciente -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="formEditar">
+                <div class="modal-header medical-bg-primary text-white">
+                    <h5 class="modal-title" id="modalEditarLabel">
+                        <i class="fas fa-user-edit me-2"></i>Editar Paciente Oncológico
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <input type="hidden" name="id" id="editarId">
+                    
+                    <!-- Sección 1: Información Básica -->
+                    <div class="col-md-6">
+                        <label class="form-label">ID Paciente</label>
+                        <input type="text" name="patient_id" id="editarPatientId" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Edad</label>
+                        <input type="number" name="age" id="editarAge" class="form-control" min="0" max="120">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Género</label>
+                        <select name="gender" id="editarGender" class="form-select" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="Male">Masculino</option>
+                            <option value="Female">Femenino</option>
+                            <option value="Other">Otro</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Sección 2: Ubicación y Diagnóstico -->
+                    <div class="col-md-6">
+                        <label class="form-label">País/Región</label>
+                        <select name="country_region" id="editarCountry" class="form-select"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Año de Diagnóstico</label>
+                        <input type="number" name="year" id="editarYear" class="form-control" min="1900" max="2025">
+                    </div>
+                    
+                    <!-- Sección 3: Tipo y Etapa de Cáncer -->
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de Cáncer</label>
+                        <select name="cancer_type" id="editarCancerType" class="form-select" required></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Etapa</label>
+                        <select name="cancer_stage" id="editarCancerStage" class="form-select" required></select>
+                    </div>
+                    
+                    <!-- Sección 4: Factores de Riesgo -->
+                    <div class="col-12 mt-3">
+                        <h6 class="medical-text-primary"><i class="fas fa-exclamation-triangle me-1"></i>Factores de Riesgo</h6>
+                        <hr class="my-1">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Riesgo Genético</label>
+                        <select name="genetic_risk" id="editarGeneticRisk" class="form-select">
+                            <option value="Bajo">Bajo</option>
+                            <option value="Medio">Medio</option>
+                            <option value="Alto">Alto</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Contaminación (1-10)</label>
+                        <input type="number" name="air_pollution" id="editarAirPollution" class="form-control" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Consumo Alcohol (1-10)</label>
+                        <input type="number" name="alcohol_use" id="editarAlcoholUse" class="form-control" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Tabaco (1-10)</label>
+                        <input type="number" name="smoking" id="editarSmoking" class="form-control" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Obesidad (1-10)</label>
+                        <input type="number" name="obesity_level" id="editarObesityLevel" class="form-control" min="0" max="10" step="0.1">
+                    </div>
+                    
+                    <!-- Sección 5: Tratamiento y Pronóstico -->
+                    <div class="col-12 mt-3">
+                        <h6 class="medical-text-primary"><i class="fas fa-heartbeat me-1"></i>Tratamiento y Pronóstico</h6>
+                        <hr class="my-1">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Costo Tratamiento (USD)</label>
+                        <input type="number" name="treatment_cost_usd" id="editarTreatmentCost" class="form-control" min="0" step="100">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Años Sobrevivencia</label>
+                        <input type="number" name="survival_years" id="editarSurvivalYears" class="form-control" min="0" step="0.1">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Puntuación Severidad (1-10)</label>
+                        <input type="number" name="target_severity_score" id="editarSeverityScore" class="form-control" min="1" max="10" step="0.1" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn medical-bg-primary text-white">
+                        <i class="fas fa-save me-1"></i> Guardar Cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

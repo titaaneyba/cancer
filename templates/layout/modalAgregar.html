@@ -1,0 +1,116 @@
+<!-- Botón Agregar -->
+<div class="mb-3">
+  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+    <i class="fas fa-user-plus me-1"></i> Agregar Paciente
+  </button>
+</div>
+
+<!-- Modal Agregar -->
+<div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="formAgregar">
+        <div class="modal-header medical-bg-primary text-white">
+          <h5 class="modal-title"><i class="fas fa-procedures me-2"></i>Nuevo Paciente Oncológico</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <!-- Sección 1: Información Básica -->
+          <div class="col-md-6">
+            <label class="form-label">ID Paciente</label>
+            <input type="text" name="patient_id" class="form-control" required>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Edad</label>
+            <input type="number" name="age" class="form-control" min="0" max="120">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Género</label>
+            <select name="gender" id="addGender" class="form-select" required>
+              <option value="">Seleccionar...</option>
+              <option value="Male">Masculino</option>
+              <option value="Female">Femenino</option>
+              <option value="Other">Otro</option>
+            </select>
+          </div>
+          
+          <!-- Sección 2: Ubicación y Diagnóstico -->
+          <div class="col-md-6">
+            <label class="form-label">País/Región</label>
+            <select name="country_region" id="addCountry" class="form-select"></select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Año de Diagnóstico</label>
+            <input type="number" name="year" class="form-control" min="1900" max="2025">
+          </div>
+          
+          <!-- Sección 3: Tipo y Etapa de Cáncer -->
+          <div class="col-md-6">
+            <label class="form-label">Tipo de Cáncer</label>
+            <select name="cancer_type" id="addCancerType" class="form-select" required></select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Etapa</label>
+            <select name="cancer_stage" id="addCancerStage" class="form-select" required></select>
+          </div>
+          
+          <!-- Sección 4: Factores de Riesgo -->
+          <div class="col-12 mt-3">
+            <h6 class="medical-text-primary"><i class="fas fa-exclamation-triangle me-1"></i>Factores de Riesgo</h6>
+            <hr class="my-1">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Riesgo Genético</label>
+            <select name="genetic_risk" class="form-select">
+              <option value="Bajo">Bajo</option>
+              <option value="Medio">Medio</option>
+              <option value="Alto">Alto</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Contaminación (1-10)</label>
+            <input type="number" name="air_pollution" class="form-control" min="0" max="10" step="0.1">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Consumo Alcohol (1-10)</label>
+            <input type="number" name="alcohol_use" class="form-control" min="0" max="10" step="0.1">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Tabaco (1-10)</label>
+            <input type="number" name="smoking" class="form-control" min="0" max="10" step="0.1">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Obesidad (1-10)</label>
+            <input type="number" name="obesity_level" class="form-control" min="0" max="10" step="0.1">
+          </div>
+          
+          <!-- Sección 5: Tratamiento y Pronóstico -->
+          <div class="col-12 mt-3">
+            <h6 class="medical-text-primary"><i class="fas fa-heartbeat me-1"></i>Tratamiento y Pronóstico</h6>
+            <hr class="my-1">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Costo Tratamiento (USD)</label>
+            <input type="number" name="treatment_cost_usd" class="form-control" min="0" step="100">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Años Sobrevivencia</label>
+            <input type="number" name="survival_years" class="form-control" min="0" step="0.1">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Puntuación Severidad (1-10)</label>
+            <input type="number" name="target_severity_score" class="form-control" min="1" max="10" step="0.1" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn medical-bg-primary text-white">
+            <i class="fas fa-save me-1"></i> Guardar Paciente
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

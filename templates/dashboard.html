@@ -1,0 +1,225 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Dashboard Oncológico{% endblock %}
+
+{% block content %}
+{% include 'layout/header_dashboard.html' %}
+
+<div class="bg-light-blue">
+    {% include 'layout/nav.html' %}
+    
+    <div class="container-fluid">
+        <div class="row mt-4">
+            <div class="col-12">
+                <h1 class="text-center text-primary">
+                    <i class="fas fa-heartbeat me-2"></i>Dashboard Oncológico
+                </h1>
+                <p class="text-center text-muted">Bienvenido, {{ username }}! 👨‍⚕️</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-filter me-2"></i>Filtros
+                    </div>
+                    <div class="card-body">
+                        <form id="filtrosForm" method="GET" action="{{ url_for('dashboard') }}">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="form-label">Tipo de Cáncer</label>
+                                    <select name="cancer_type" id="filterCancerType" class="form-select">
+                                        <option value="">Todos</option>
+                                        {% for type in cancer_types %}
+                                            <option value="{{ type }}" {% if request.args.get('cancer_type') == type %}selected{% endif %}>{{ type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Género</label>
+                                    <select name="gender" id="filterGender" class="form-select">
+                                        <option value="">Todos</option>
+                                        {% for gender in genders %}
+                                            <option value="{{ gender }}" {% if request.args.get('gender') == gender %}selected{% endif %}>{{ gender }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">País/Región</label>
+                                    <select name="country" id="filterCountry" class="form-select">
+                                        <option value="">Todos</option>
+                                        {% for country in countries %}
+                                            <option value="{{ country }}" {% if request.args.get('country') == country %}selected{% endif %}>{{ country }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Etapa</label>
+                                    <select name="stage" id="filterStage" class="form-select">
+                                        <option value="">Todas</option>
+                                        {% for stage in stages %}
+                                            <option value="{{ stage }}" {% if request.args.get('stage') == stage %}selected{% endif %}>{{ stage }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12 text-end">
+                                    <button type="submit" class="btn btn-primary me-2">
+                                        <i class="fas fa-filter me-1"></i> Aplicar Filtros
+                                    </button>
+                                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-broom me-1"></i> Limpiar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="row">
+            <!-- Tarjeta 1 - Total Pacientes -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-info text-white shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">Pacientes</h5>
+                                <h2 class="mb-0">{{ pacientes|length }}</h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-users fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 2 - En Tratamiento -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-success text-white shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">En Tratamiento</h5>
+                                <h2 class="mb-0">
+                                    {{ pacientes|selectattr('cancer_stage', 'in', ['Stage I', 'Stage II', 'Stage III', 'Stage IV'])|list|length }}
+                                </h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-procedures fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3 - En Remisión -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-warning text-white shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">En Remisión</h5>
+                                <h2 class="mb-0">
+                                    {{ pacientes|selectattr('cancer_stage', 'equalto', 'Stage 0')|list|length }}
+                                </h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-heart fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 4 - Fallecidos -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-danger text-white shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">Fallecidos</h5>
+                                <h2 class="mb-0">
+                                    {{ pacientes|selectattr('survival_years', 'equalto', 0)|list|length }}
+                                </h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-cross fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de pacientes -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-header bg-secondary text-white">
+        <i class="fas fa-table me-2"></i>Listado de Pacientes
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Patient ID</th>
+              <th>Edad</th>
+              <th>Género</th>
+              <th>País/Región</th>
+              <th>Año</th>
+              <th>Tipo de Cáncer</th>
+              <th>Etapa</th>
+              <th>Costo Tratamiento (USD)</th>
+              <th>Años Supervivencia</th>
+              <th>Riesgo Genético</th>
+              <th>Contaminación</th>
+              <th>Consumo Alcohol</th>
+              <th>Tabaco</th>
+              <th>Obesidad</th>
+              <th>Puntuación Severidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if pacientes %}
+              {% for p in pacientes %}
+              <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.patient_id }}</td>
+                <td>{{ p.age }}</td>
+                <td>{{ p.gender }}</td>
+                <td>{{ p.country_region }}</td>
+                <td>{{ p.year }}</td>
+                <td>{{ p.cancer_type }}</td>
+                <td>{{ p.cancer_stage }}</td>
+                <td>{{ p.treatment_cost_usd }}</td>
+                <td>{{ p.survival_years }}</td>
+                <td>{{ p.genetic_risk }}</td>
+                <td>{{ p.air_pollution }}</td>
+                <td>{{ p.alcohol_use }}</td>
+                <td>{{ p.smoking }}</td>
+                <td>{{ p.obesity_level }}</td>
+                <td>{{ p.target_severity_score }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="16" class="text-center">No hay datos de pacientes disponibles.</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
