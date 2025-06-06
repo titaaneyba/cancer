@@ -1,13 +1,13 @@
 {% extends 'layout/base.html' %}
-
+ 
 {% block title %}Dashboard Oncológico{% endblock %}
-
+ 
 {% block content %}
 {% include 'layout/header_dashboard.html' %}
-
+ 
 <div class="bg-light-blue">
     {% include 'layout/nav.html' %}
-    
+   
     <div class="container-fluid">
         <div class="row mt-4">
             <div class="col-12">
@@ -17,7 +17,7 @@
                 <p class="text-center text-muted">Bienvenido, {{ username }}! 👨‍⚕️</p>
             </div>
         </div>
-
+ 
         <!-- Filtros -->
         <div class="row mb-4">
             <div class="col-12">
@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-
+ 
         <!-- Estadísticas -->
         <div class="row">
             <!-- Tarjeta 1 - Total Pacientes -->
@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            
+           
             <!-- Tarjeta 2 - En Tratamiento -->
             <div class="col-md-3 mb-4">
                 <div class="card bg-success text-white shadow-sm">
@@ -118,7 +118,7 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- Tarjeta 3 - En Remisión -->
             <div class="col-md-3 mb-4">
                 <div class="card bg-warning text-white shadow-sm">
@@ -137,7 +137,7 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- Tarjeta 4 - Fallecidos -->
             <div class="col-md-3 mb-4">
                 <div class="card bg-danger text-white shadow-sm">
@@ -157,7 +157,7 @@
                 </div>
             </div>
         </div>
-
+ 
         <!-- Tabla de pacientes -->
 <div class="row mt-4">
   <div class="col-12">
@@ -220,6 +220,6 @@
     </div>
   </div>
 </div>
-
-
+ 
+ 
 {% endblock %}

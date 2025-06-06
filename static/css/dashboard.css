@@ -55,18 +55,12 @@ body {
 .nav-link {
   font-weight: 500;
   padding: 0.5rem 1rem;
+  transition: all 0.2s ease-in-out;
 }
 
-#toggleTheme {
-  border: 1px solid white;
-  color: white;
-  background-color: transparent;
-  transition: all 0.3s ease;
-}
-
-#toggleTheme:hover {
-  background-color: white;
-  color: var(--medical-primary);
+.nav-link:hover {
+  background-color: var(--medical-accent);
+  border-radius: 0.3rem;
 }
 
 /* ============ TARJETAS ESTADÍSTICAS ============ */
@@ -190,17 +184,15 @@ body {
   padding: 0.6rem 1.5rem;
   font-weight: 500;
   transition: all 0.3s ease;
-}
-
-.btn-medical-primary {
   background-color: var(--medical-primary);
   color: white;
   border: none;
 }
 
-.btn-medical-primary:hover {
-  background-color: #1565c0;
+.btn-medical:hover {
+  background-color: var(--medical-dark);
   color: white;
+  transform: scale(1.03);
 }
 
 /* ============ MODO OSCURO ============ */
@@ -266,29 +258,110 @@ body {
     height: 200px;
   }
 }
+
 /* Estilos para los filtros */
 .card-header {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .form-select {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .btn-outline-secondary:hover {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 /* Mejorar la tabla */
 .table-responsive {
-    max-height: 500px;
-    overflow-y: auto;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .table thead th {
-    position: sticky;
-    top: 0;
-    background-color: #6c757d;
-    color: white;
-    z-index: 10;
+  position: sticky;
+  top: 0;
+  background-color: #6c757d;
+  color: white;
+  z-index: 10;
+}
+/* Botones responsivos */
+.btn-responsive {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+@media (max-width: 768px) {
+    .btn-responsive {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .btn-group-responsive > .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* Estilos para el dashboard */
+.banner-oncologico {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+.bg-light-blue {
+    background-color: #f8f9fa;
+}
+
+/* Estilos para las tarjetas de estadísticas */
+.card-stat {
+    border-left: 4px solid;
+}
+
+.card-stat.card-info {
+    border-left-color: #17a2b8;
+}
+
+.card-stat.card-success {
+    border-left-color: #28a745;
+}
+
+.card-stat.card-warning {
+    border-left-color: #ffc107;
+}
+
+.card-stat.card-danger {
+    border-left-color: #dc3545;
+}
+
+/* Animaciones */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
 }

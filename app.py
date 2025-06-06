@@ -6,18 +6,18 @@ from models.base import engine
 from models.model import Usuario, PacienteCancer
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
-
+ 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev_key_fallback")
-
+ 
 # Configuración de la sesión de la base de datos
 Session = sessionmaker(bind=engine)
 db_session = Session()
-
+ 
 # Crear tablas
 from models.model import Base
 Base.metadata.create_all(engine)
-
+ 
 # Verificación de conexión a la base de datos
 @app.before_request
 def check_db_connection():
@@ -30,21 +30,21 @@ def check_db_connection():
             print("❌ Error de conexión a la base de datos:", str(e))
             db_session.rollback()
             raise e
-
+ 
 # Setup de LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'auth'
-
+ 
 @login_manager.user_loader
 def load_user(user_id):
     return db_session.query(Usuario).get(int(user_id))
-
+ 
 # Ruta principal
 @app.route('/')
 def home():
     return render_template('auth.html')
-
+ 
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
     if request.method == 'POST':
@@ -73,23 +73,23 @@ def auth():
                 flash('Usuario o contraseña incorrectos', 'danger')
                 return redirect(url_for('auth'))
     return render_template('auth.html')
-
+ 
 @app.route('/dashboard')
 @login_required
 def dashboard():
     # Cargar todos los pacientes inicialmente
     pacientes = db_session.query(PacienteCancer).all()
-    
+   
     # Obtener parámetros de filtro si existen
     cancer_type = request.args.get('cancer_type')
     gender = request.args.get('gender')
     country = request.args.get('country')
     stage = request.args.get('stage')
-    
+   
     # Aplicar filtros si se especificaron
     if any([cancer_type, gender, country, stage]):
         query = db_session.query(PacienteCancer)
-        
+       
         if cancer_type:
             query = query.filter(PacienteCancer.cancer_type == cancer_type)
         if gender:
@@ -98,15 +98,15 @@ def dashboard():
             query = query.filter(PacienteCancer.country_region == country)
         if stage:
             query = query.filter(PacienteCancer.cancer_stage == stage)
-            
+           
         pacientes = query.all()
-    
+   
     # Obtener opciones únicas para los filtros
     cancer_types = sorted([t[0] for t in db_session.query(PacienteCancer.cancer_type).distinct() if t[0]])
     genders = sorted([g[0] for g in db_session.query(PacienteCancer.gender).distinct() if g[0]])
     countries = sorted([c[0] for c in db_session.query(PacienteCancer.country_region).distinct() if c[0]])
     stages = sorted([s[0] for s in db_session.query(PacienteCancer.cancer_stage).distinct() if s[0]])
-    
+   
     return render_template('dashboard.html',
                          username=current_user.username,
                          pacientes=pacientes,
@@ -114,13 +114,13 @@ def dashboard():
                          genders=genders,
                          countries=countries,
                          stages=stages)
-
+ 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('auth'))
-
+ 
 # API para datos de cáncer
 @app.route('/api/cancer')
 def api_cancer():
@@ -146,26 +146,26 @@ def api_cancer():
             "target_severity_score": p.target_severity_score
         })
     return jsonify(data)
-
+ 
 @app.route('/api/cancer_filters')
 def api_cancer_filters():
     genders = sorted([g[0] for g in db_session.query(PacienteCancer.gender).distinct() if g[0]])
     countries = sorted([c[0] for c in db_session.query(PacienteCancer.country_region).distinct() if c[0]])
     cancer_types = sorted([t[0] for t in db_session.query(PacienteCancer.cancer_type).distinct() if t[0]])
     cancer_stages = sorted([s[0] for s in db_session.query(PacienteCancer.cancer_stage).distinct() if s[0]])
-
+ 
     return jsonify({
         "genders": genders,
         "countries": countries,
         "cancer_types": cancer_types,
         "cancer_stages": cancer_stages
     })
-
+ 
 @app.route('/listpatients')
 @login_required
 def listpatients():
     return render_template('crud/list.html')
-
+ 
 @app.route('/api/list_patients')
 def api_list_patients():
     pacientes = db_session.query(PacienteCancer).all()
@@ -190,7 +190,7 @@ def api_list_patients():
             "target_severity_score": p.target_severity_score
         })
     return jsonify(data)
-
+ 
 @app.route('/add/patient', methods=['POST'])
 def crear_paciente():
     data = request.json
@@ -214,7 +214,7 @@ def crear_paciente():
     db_session.add(nuevo)
     db_session.commit()
     return jsonify({"mensaje": "Paciente agregado correctamente"})
-
+ 
 @app.route('/del/patient/<int:id>', methods=['DELETE'])
 def eliminar_paciente(id):
     try:
@@ -227,15 +227,15 @@ def eliminar_paciente(id):
     except Exception as e:
         db_session.rollback()
         return jsonify({"error": str(e)}), 500
-
-
+ 
+ 
 @app.route('/upd/patient/<int:id>', methods=['PUT'])
 def actualizar_paciente(id):
     data = request.json
     paciente = db_session.query(PacienteCancer).get(id)
     if not paciente:
         return jsonify({"error": "Paciente no encontrado"}), 404
-
+ 
     paciente.patient_id = data.get("patient_id")
     paciente.age = int(data.get("age")) if data.get("age") else None
     paciente.gender = data.get("gender")
@@ -251,9 +251,12 @@ def actualizar_paciente(id):
     paciente.treatment_cost_usd = float(data.get("treatment_cost_usd"))
     paciente.survival_years = float(data.get("survival_years"))
     paciente.target_severity_score = float(data.get("target_severity_score"))
-
+ 
     db_session.commit()
     return jsonify({"mensaje": "Paciente actualizado correctamente"})
-
+ 
+ 
 if __name__ == '__main__':
-    app.run(debug=True)
+    ##app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Render asigna el puerto dinámicamente
+    app.run(host='0.0.0.0', port=port)
