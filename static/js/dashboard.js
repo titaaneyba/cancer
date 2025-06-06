@@ -1,4 +1,9 @@
 function renderGraficos(data) {
+    // Verificar que currentCharts exista
+    if (typeof currentCharts !== 'object' || currentCharts === null) {
+        currentCharts = {};
+    }
+
     // Destruir gráficos existentes antes de crear nuevos
     Object.keys(currentCharts).forEach(id => {
         if (currentCharts[id]) {
@@ -45,16 +50,20 @@ function renderGraficos(data) {
         avgSurvivalValues.push(val.count ? val.totalYears / val.count : 0);
     });
 
-    // --- Crear gráficos ---
+    // Colores base para gráficos (se repiten si hay más categorías)
+    const baseColors = ['#6A5ACD', '#FFA500', '#4682B4', '#FF6384', '#FFCE56'];
+
+    // Tema para textos y leyendas
     const themeColor = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#FFF' : '#333';
 
+    // Crear gráficos
     currentCharts.distribucionCancer = new Chart(document.getElementById('distribucionCancer'), {
         type: 'doughnut',
         data: {
             labels: Object.keys(cancerTypeCounts),
             datasets: [{
                 data: Object.values(cancerTypeCounts),
-                backgroundColor: ['#6A5ACD', '#FFA500', '#4682B4', '#FF6384', '#FFCE56'],
+                backgroundColor: Object.keys(cancerTypeCounts).map((_, i) => baseColors[i % baseColors.length]),
                 borderWidth: 2
             }]
         },
