@@ -6,7 +6,7 @@ from flask_login import UserMixin
 Base = declarative_base()
 
 class PacienteCancer(Base):
-    __tablename__ = 'pacientes_cancer'
+    __tablename__ = 'cancer_data'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     patient_id = Column(String(50), unique=True)
